@@ -1,0 +1,146 @@
+<div class = "margin50px" id = "append-comment-<%=comment.id %>" data-id = "<%= comment.id %>">
+	
+		
+	</span>
+	<p>
+		<span style= "width:30px;">
+			<%= gravatar_for comment.user %>
+		</span>
+		<%= link_to (comment.user.fullname || comment.user.email), user_path(comment.user) %>	
+	</p>
+	<p id = "comment-content">	
+		<%= comment.content %>	 
+	</p>
+	<b id = "count-subcomment<%= comment.id %>">	
+ 		replay(<%= comment.sub_comments.count %>),
+		from(<%= time_ago_in_words(comment.created_at) %>) --> 
+	</b>	
+ 	
+  <% if user_signed_in? %>
+   <% if current_user.current_user?(comment.user) %>
+	   <span class = "delete-comment" data-id = "<%= comment.id %>">
+	    <%= link_to  product_comment_path(comment.product, comment),
+	          method: :delete,
+	          data: {alert: "are you sure?"}, id: "delete-comment#{comment.id}", remote:true do %><i class='fas fa-trash-alt' style='font-size:15px;color:red'></i><% end %>
+	   </span> 
+	   <span class = "edit-comment" data-id = "<%= comment.id %>">
+	   	<%= link_to  '#', id: "edit#{comment.id}", remote: true do %><i class="fa fa-edit" style="font-size:15px;color:#52FF33"></i><% end %>
+	   </span>
+	
+    <% end %> 
+    <% if comment.parent_id.nil? %>     
+    <span class = "subcomment">     
+   		<%= link_to  '#',id: "subcomment#{comment.id}", remote: true do %><i class="fa fa-reply" style="font-size:15px;color:ruby"></i><% end %>
+   	</span>	
+   	<span class = "comment-subcomment-form<%=comment.id %>" style = "display: none">
+   	
+		<input value="<%= comment.id %>" type="hidden" name="sub_comment[comment_id]" id="sub_comment_comment_id<%= comment.id %>">
+		<input class="form-control" type="text" name="sub_comment[content]" id="sub_comment_content<%= comment.id %>">
+		<span class = "sub-comment">	
+			<input type="button" name="commit" value="reply" class="btn btn-success " data-id = "<%=comment.id%>" id= "sub-comment<%=comment.id %>"  >
+		</span>
+		
+   	</span>
+   	<div id = "comment-<%= comment.id %>" style = "margin-left: 50px;">
+   		<%= render comment.sub_comments %>
+   	</div>	
+   <% end %>
+
+	<% end %>
+	   <span id = "edit-form<%= comment.id %>" style = "display: none">  
+          <input value="<%= comment.product.present? ? comment.product.id : product.id  %>" type="hidden" name="comment[product_id]" id = "comment_product_id<%=comment.id %>" >
+          <input placeholder="comment" required="required" class="form-control add-comment" data-id = "<%= comment.id %>" id = "comment_content<%=comment.id %>" type="text" name="comment[content]" >
+	      <br>
+	      <br>
+        <center >
+        	<span class = update-comment data-id = "<%=comment.id %>">
+        		<input type="button" name="commit" value="comment" class="btn btn-success "  id = "update-comment<%= comment.id %>">
+        	</span>
+      </center> 
+	   </span>
+
+	<script type="text/javascript">
+		var url = window.location.pathname;
+        var product_id = url.substring(url.lastIndexOf('/') + 1);
+		$(document).ready(function(){
+			$(document).on('click', '.delete-comment',function(){
+				debugger
+				
+				comment_id = $(this).data('id');
+				var deleteComment = '#delete-comment'+comment_id;
+				$('#append-comment-'+comment_id).remove();
+
+			});	
+			// update comment
+			$(document).on('click', '.edit-comment',function(){
+				debugger
+
+				comment_id = $(this).data('id');
+				var editComment = '#edit'+comment_id;
+				$.ajax({
+					url: '/products/'+product_id+'/comments/'+comment_id,
+					type: 'GET',
+					_method: 'PATCH',
+					success: function(){
+						$('#edit-form'+comment_id).show();
+						$('#comment_content'+comment_id).val('<%=comment.content %>')
+					}
+				})
+			});	
+
+			$(document).on('click','.update-comment', function(){
+				debugger
+	
+					$.ajax({
+					url: '/products/'+product_id+'/comments/'+comment_id,
+					type: 'PUT',
+					dataType: 'json',
+					data:{
+						product_id: $('#comment_product_id'+comment_id).val(),
+						content: $('#comment_content'+comment_id).val()
+					},
+					success: function(data){
+						$('#append-comment-'+comment_id).replaceWith(data.update_data_comment);
+						alert('updated')
+					}
+				})
+			});					
+		});			
+	</script>
+
+	<script type="text/javascript">
+			$(document).ready(function(){
+				$('.subcomment').click(function(){
+					comment_id = $(this).data('id');
+					Subcomment = '#subcomment'+ comment_id;
+					$('.comment-subcomment-form'+ comment_id).show();	
+				
+				}) 
+				
+			$('.sub-comment').click(function(){
+				 comment_id = $(this).data('id');
+				 subComment = '#sub-comment'+comment_id
+
+				debugger
+					$.ajax({
+						url:  '/comments/'+ comment_id +'/sub_comments',
+						type: 'POST',
+						dataType: 'json',
+	          			data: {
+			            	comment_id: $('#sub_comment_comment_id'+ comment_id).val(), 
+			            	content: $('#sub_comment_content'+ comment_id).val()
+			        	},
+				        success: function(data){
+				          	debugger			          	
+				            $('#comment-'+ comment_id).prepend(data.data_comment_subcomment),
+				            $('#sub_comment_content'+ comment_id).val(undefined)
+				            $('.comment-subcomment-form'+ comment_id).hide()
+				         }		         
+					})
+				});		
+			});
+	</script>
+</div>
+
+
+					

@@ -6,3 +6,9 @@ vi:
       Account: Tai khoan
       English: Tieng anh
       Vietnamese: Tieng viet
+      KIDS: Trẻ Em
+      WOMENS: PHỤ NỮ
+      MENS: ĐÀN ÔNG
+products:
+    show:
+        Condition: Tình trạng    

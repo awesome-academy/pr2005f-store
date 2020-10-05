@@ -19,7 +19,9 @@ require('admin-lte')
 //= require price-range
 //= require_tree
 
+
 import 'bootstrap';
+// import 'packs/comment'
 import "admin-lte/dist/css/AdminLTE.css";
 import "admin-lte/dist/css/skins/_all-skins.css";
 import 'bootstrap/dist/css/bootstrap.css';

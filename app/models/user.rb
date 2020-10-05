@@ -1,9 +1,9 @@
 class User < ApplicationRecord
-
 	has_many :orders
-	has_many :comments
-	has_many :sub_comments
+	has_many :comments, dependent: :destroy
+	has_many :sub_comments, dependent: :destroy
 	has_many :order_details, through: :orders
+
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable,
@@ -11,6 +11,9 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :omniauthable , omniauth_providers: [:facebook]
 
+    def current_user?(user)
+		user && user == self
+	end     
     class << self     
 	    def from_omniauth(auth)
 	   		result = User.where(email: auth.info.email).first
@@ -32,4 +35,5 @@ class User < ApplicationRecord
 		    end
 	  	end
 	end  
+
 end

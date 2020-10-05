@@ -1,0 +1,17 @@
+
+<div id = "sub_comment-<%= sub_comment.id %>" style = "margin-top:20px">
+	<%= link_to (sub_comment.user.email), user_path(sub_comment.user) %>
+	<br />
+	<%= sub_comment.content %>
+	<br>
+	<span id = "delete-subcomment<%= sub_comment.id %>">
+		<%= link_to comment_sub_comment_path(sub_comment.comment, sub_comment), method: :delete, remote: true do %>
+		<i class='fas fa-trash-alt' style='font-size:15px;color:red'></i>
+		<% end %>
+	</span>
+</div>
+<script type="text/javascript">
+	$('#delete-subcomment<%= sub_comment.id %>').click(function(){
+		$('#sub_comment-<%= sub_comment.id %>').remove();
+	});
+</script>

@@ -38,3 +38,9 @@ en:
       Account: Account
       English: Enghlish
       Vietnamese: Vietnamese
+      KIDS: KIDS
+      WOMENS: WOMENS
+      MENS: MENS
+  products:
+    show:
+      Condition: Condition

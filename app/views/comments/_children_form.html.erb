@@ -1,0 +1,42 @@
+<% if user_signed_in? %>
+  <div>
+         <input value="<%= parent_id %>" type="hidden" name="comment[parent_id]" class ="comment_parent_id<%= parent_id %>">
+          <input value="<%= product.id %>" type="hidden" name="comment[product_id]" class ="comment_product_id<%= parent_id %>">
+          <input value="<%= current_user.id %>" type="hidden" name="comment[user_id]" class ="comment_user_id<%= parent_id %>">
+          <input placeholder="comment" required="required" class="form-control add-comment" class = "comment_content<%= parent_id %>" type="text"
+             name="comment[content]">
+
+
+      <br>
+      <br>
+        <center id = "post-comment" ><input type="button" name="commit" value="comment" class="btn btn-success" ></center> 
+    
+  </div> 
+<% end %>
+
+<script type="text/javascript">
+  $(document).on('turbolinks:load', function() {
+  	var parent_id = document.getElementById('comment_parent_id');
+    $('#post-comment'+parent_id).click(function(){
+      debugger
+        var url = window.location.pathname;
+        var product_id = url.substring(url.lastIndexOf('/') + 1);
+       
+        $.ajax({
+          url: '/products/'+ product_id + '/comments',
+          type: 'POST',
+          dataType: 'json',
+          data: {
+            parent_id: $('.comment_parent_id').val(),
+            product_id: $('.comment_product').val(),
+            user_id: $('.comment_user_id').val(),
+            content: $('.comment_content').val()
+          },
+          success: function(data){
+            $('#append-comment').html(data.comment_data);
+            alert('success')
+          }
+        });
+      });
+    });
+</script>
