@@ -1,0 +1,87 @@
+<div class = "margin50px" id = "append-comment-<%=comment.id %>" data-id = "<%= comment.id %>">
+	<p>
+		<span style= "width:30px;">
+			<%= gravatar_for comment.user %>
+		</span>
+		<%= link_to (comment.user.fullname || comment.user.email), user_path(comment.user) %>	
+	</p>
+	<p id = "comment-content">
+		
+		<%= comment.content %>
+		 
+	</p>
+	<b id = "count-subcomment<%= comment.id %>">	
+ 		replay(<%= comment.sub_comments.count %>),
+		from(<%= time_ago_in_words(comment.created_at) %>) --> 
+	</b>	
+ 	
+  <% if user_signed_in? %>
+   <% if current_user.current_user?(comment.user) %>
+   <span id = "delete-comment-<%= comment.id %>">
+    <%= link_to 'delete' , product_comment_path(comment.product, comment),
+          method: :delete,
+          data: {alert: "are you sure?"}, id: "delete-comment", remote: true %>
+    <% end %> 
+   </span> 
+    <% if comment.parent_id.nil? %>     
+    <span id = "subcomment-<%= comment.id %>">     
+   		<%= link_to "reply", '#', remote: true %>
+   	</span>	
+   	<span class = "comment-subcomment-form<%=comment.id %>" style = "display: none">
+   	
+		<input value="<%= comment.id %>" type="hidden" name="sub_comment[comment_id]" id="sub_comment_comment_id<%= comment.id %>">
+		<input class="form-control" type="text" name="sub_comment[content]" id="sub_comment_content<%= comment.id %>">
+		<input type="button" name="commit" value="reply" class="btn btn-success subcomment<%=comment.id %>" data-id = "<%=comment.id%>" >
+		
+   	</span>
+   	<div id = "comment-<%= comment.id %>" style = "margin-left: 50px;">
+   		<%= render comment.sub_comments %>
+   	</div>	
+   <% end %>
+
+	<% end %>
+</div>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			
+				$('#subcomment-<%= comment.id %>').click(function(){
+					$('.comment-subcomment-form<%= comment.id %>').toggle();	
+				});
+
+				$('#delete-comment-<%= comment.id %>').click(function(){
+					$('#append-comment-<%= comment.id %>').remove();
+					$('#delete-comment-<%= comment.id %>').remove();
+					$('#replycomment-<%= comment.id %>').remove();
+				});				
+					
+		});				
+	</script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('.subcomment<%=comment.id %>').click(function(){
+				 var commentid = $(this).data('id');
+				
+				debugger
+					$.ajax({
+						url:  '/comments/'+ commentid +'/sub_comments',
+						type: 'POST',
+						dataType: 'json',
+	          			data: {
+			            	comment_id: $('#sub_comment_comment_id<%= comment.id %>').val(), 
+			            	content: $('#sub_comment_content<%= comment.id %>').val()
+			        	},
+				        success: function(data){
+				          	debugger			          	
+				            $('#comment-<%= comment.id %>').prepend(data.data_comment_subcomment),
+				            $('#sub_comment_content<%= comment.id %>').val(undefined)
+				            $('.comment-subcomment-form<%=comment.id %>').hide()
+				         }		         
+
+					})
+				});		
+			});
+	</script>
+
+
+
+					
