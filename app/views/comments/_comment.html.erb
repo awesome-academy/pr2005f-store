@@ -1,0 +1,48 @@
+<div class = "margin50px" id = "comment-ajax-<%=comment.id %>">
+	<p>
+		<span style= "width:30px;">
+			<%= gravatar_for comment.user %>
+		</span>
+		<%= link_to (comment.user.fullname || comment.user.email), user_path(comment.user) %>	
+	</p>
+	<p id = "comment-content">
+		
+		<%= comment.content %>
+		 
+	</p>
+ 
+<%= time_ago_in_words(comment.created_at) %> --> 
+ 	
+  <% if user_signed_in? %>
+   <% if current_user.current_user?(comment.user) %>
+   <span id = "delete-comment-<%= comment.id %>">
+    <%= link_to 'delete' , product_comment_path(comment.product, comment),
+          method: :delete,
+          data: {confirm: t("products.show.sure")}, id: "delete-comment", remote: true %>
+    <% end %> 
+   </span> 
+    <% if comment.parent_id.nil? %>     
+    <spand id = "click-<%= comment.id %>">     
+   		<%= link_to "reply", new_product_comment_path(comment),parent_id: comment.id, remote: true %>
+   	</spand>	
+   <% end %>
+	<span  id = "replycomment-<%= comment.id %>" style = "display: none; ">
+	  <%= render "comments/form", product: @product, parent_id: comment.id, comment_new: Comment.new %>
+	</span> 
+	<% end %>
+</div>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			
+				$('#click-<%= comment.id%>').click(function(){
+						$('#replycomment-<%= comment.id %>').show();	
+					});
+			
+					$('#delete-comment-<%= comment.id %>').click(function(){
+						$('#comment-ajax-<%= comment.id %>').remove();
+						$('#delete-comment-<%= comment.id %>').remove();
+						$('#replycomment-<%= comment.id %>').remove();
+					});				
+					
+		});				
+	</script>

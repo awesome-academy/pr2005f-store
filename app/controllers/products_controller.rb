@@ -5,8 +5,12 @@ class ProductsController < ApplicationController
 		@products = Product.all
 	end	
 	def show
-		@comment = current_user.comments.build
-		@comments = @product.comments
+		@supports = Supports::Product.new @product
+		if current_user.present?
+			@comment = current_user.comments.build
+		end
+
+		@comments = @product.comments.page(params[:page]).per 20
 	end
 	
 	private
