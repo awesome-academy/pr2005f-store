@@ -13,5 +13,6 @@ class UsersController < ApplicationController
 	 		flash[:danger] = "you are logging"
 	 		redirect_to root_url
 	 	end	
-	end 	
+	end 
+	
 end

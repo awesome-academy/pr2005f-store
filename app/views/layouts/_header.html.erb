@@ -32,11 +32,14 @@
 						<div class="logo pull-left">
 							<a href="/Pages/index"><img src="images/home/logo.png" alt="" /></a>
 						</div>
+						
+									<%= link_to t("pages.index.English"), locale:"en" %>
+									<%= link_to t("pages.index.Vietnamese"), locale:"vi" %>
+					
+								
+							</select>
 						<div class="btn-group pull-right">
-							<div class="btn-group">
-								<%= link_to t("pages.index.English"), locale:"en" %>
-								<%= link_to t("pages.index.Vietnamese"), locale:"vi" %>
-							</div>
+
 							
 							<div class="btn-group">
 								<button type="button" class="btn btn-default dropdown-toggle usa" data-toggle="dropdown">
@@ -49,6 +52,7 @@
 								</ul>
 							</div>
 						</div>
+
 					</div>
 
 					<div class="col-sm-8">
@@ -56,29 +60,32 @@
 							<ul class="nav navbar-nav">
 
 							<% if user_signed_in? %>	
-								<li><%= link_to current_user do %><i class="fa fa-user"></i> Account <% end %></li>
-								<li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li>
-								<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
-								<li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Cart</a></li>
+
+								<li><%= link_to current_user, :class => 
+								"you_class" do %><i class="fa fa-user"></i><%= t ("pages.index.Account") %> <% end %></li>
+
 								
+													<li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li>
+								<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
+								<li><a href="cart.html"><i class="fa fa-shopping-cart"></i>  <%= t ("pages.index.Cart") %></a></li>
 									<li>
 										<%= link_to destroy_user_session_path, method: :delete do %>
+
 											<i class='fas fa-sign-out-alt'
 											id = "login-logo"></i>
+
 											logout
 										<% end %>
 									</li>	
 									
 								<% else %>	
-									<li><a href="" data-toggle="modal" data-target="#modalLoginForm" ><i class="fa fa-lock"></i> Login</a></li>
+									<li><a href="" data-toggle="modal" data-target="#modalLoginForm" ><i class="fa fa-lock"></i> <%= t ("pages.index.Login") %></a></li>
 									
 								<% end %>
 
-						<li><a href="#"><i class="fa fa-user"></i> <%= t ("pages.index.Account") %></a></li>
-								<li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li>
-								<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
-								<li><a href="cart.html"><i class="fa fa-shopping-cart"></i>  <%= t ("pages.index.Cart") %></a></li>
-								<li><a href="login.html"><i class="fa fa-lock"></i>  <%= t ("pages.index.Login") %></a></li>
+						
+				
+								
 
 							</ul>
 						</div>

@@ -1,4 +1,6 @@
-
-<p><%= image_tag(@user.image) %></p>
-
+<p>
+	<%= @user.email %>
+</p>
 <p><%= @user.fullname %></p>
+<%= gravatar_for @user %>
+

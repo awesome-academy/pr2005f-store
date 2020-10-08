@@ -1,0 +1,38 @@
+ <div id = "comment-ajax<%= @comment.id %>">
+  <%= form_for [product, comment_new] do |f| %>
+      <%= f.hidden_field :parent_id, value: parent_id %>
+      <%= f.hidden_field :product_id, value: product.id %>
+      <%= f.hidden_field :user_id, value: current_user.id %>
+      <%= f.text_field :content, placeholder: ("comment"), required: true, class: "form-control add-comment" %>
+        <br />
+        <br />
+        <span>
+          <center id = "post-comment"><%= f.submit "comment" , class: "btn btn-success"   %></center>
+        </span>
+  <% end %>	
+</div>  
+<script type="text/javascript">
+  $(document).ready(function() {
+      $('#post-comment').click(function(){
+        var url = window.location.pathname;
+        var product_id = url.substring(url.lastIndexOf('/') + 1);
+        $.ajax({
+          url: '/products/'+ product_id + '/comments',
+          type: 'post',
+          dataType: 'html',
+          data: {
+            parent_id: $('#comment_parent_id').val(),
+            product_id: $('#comment_product_id').val(),
+            user_id: $('#comment_user_id').val(),
+            content: $('#comment_content').val()
+          },
+          success: function(data){
+            debugger
+            $('#append-comment2').append(data.comment_data)
+             window.location.href = response.redirect;
+          }
+        });
+      });
+  });
+</script>
+
