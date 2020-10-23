@@ -8,7 +8,7 @@
 		</span>
 		<%= link_to (comment.user.fullname || comment.user.email), user_path(comment.user) %>	
 	</p>
-	<p id = "comment-content">	
+	<p id = "comment-content<%=comment.id %>">	
 		<%= comment.content %>	 
 	</p>
 	<b id = "count-subcomment<%= comment.id %>">	
@@ -42,7 +42,7 @@
 		
    	</span>
    	<div id = "comment-<%= comment.id %>" style = "margin-left: 50px;">
-   		<%= render comment.sub_comments %>
+   		<%= render comment.sub_comments.includes([:user]) %>
    	</div>	
    <% end %>
 

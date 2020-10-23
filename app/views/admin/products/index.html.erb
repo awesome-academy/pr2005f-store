@@ -45,7 +45,7 @@
                   <th>Edit</th>
                 </tr>
 
-                <% @products.each do |product| %>
+                <% Product.includes([:product_details, :image_attachments]).each do |product| %>
                 <% product_detail_prices = product.product_details.map{ |product_detail| product_detail.price }.uniq%>
 
                   <tr>

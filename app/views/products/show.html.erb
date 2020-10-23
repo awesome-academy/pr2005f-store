@@ -285,7 +285,7 @@
 								
 									<div id = "append-comment">		
 										<% if @product.comments.any? %>
-											<%= render @comments %>
+											<%= render @comments.includes([:user]) %>
 
 										<% end %>
 									</div>

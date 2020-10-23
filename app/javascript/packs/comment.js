@@ -38,8 +38,8 @@ $(document).on('click', '.post-comment', function() {
 			});	
 			// update comment
 			$(document).on('click', '.edit-comment',function(){
-			
 				comment_id = $(this).data('id');
+				var inputvar = document.getElementById("comment-content"+comment_id).innerHTML
 				var editComment = '#edit'+comment_id;
 				$.ajax({
 					url: '/comments/'+comment_id,
@@ -47,7 +47,7 @@ $(document).on('click', '.post-comment', function() {
 					_method: 'PATCH',
 					success: function(){
 						$('#edit-form'+comment_id).show();
-						$('#comment_content'+comment_id).val()
+						$('#comment_content'+comment_id).val(inputvar)
 					}
 				})
 				});	

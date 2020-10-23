@@ -3,7 +3,7 @@ class ProductsController < ApplicationController
 	def index
 		@products = Product.send(params["classify"])
 		render json: {
-			data_products: render_to_string(@products)
+			data_products: render_to_string(@products.includes([:image_attachments]))
 		}, status: :ok
 
 	end	

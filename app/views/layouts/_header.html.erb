@@ -75,10 +75,6 @@
 
 								<% else %>
 
-
-									<li><a href="cart.html"><i class="fa fa-shopping-cart"></i>  <%= t ("pages.index.Cart") %></a>
-									</li>
-								
 								<% end %>
 								<li>
 									<%= link_to destroy_user_session_path, method: :delete do %>
@@ -97,10 +93,9 @@
 
 								<% end %>
 								
-								<li></i>  <%= link_to t("pages.index.Cart"), cart_path(current_cart.id)  %></li>
-							
-
-
+								<li></i>  <%= link_to cart_path(current_cart.id) do %>
+									<i class="fa fa-shopping-cart"></i>  <%= t ("pages.index.Cart") %></li>
+								<% end %>
 							</ul>
 						</div>
 					</div>
